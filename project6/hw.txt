@@ -1,0 +1,236 @@
+
+Problem 1:
+
+a.
+int main()
+{
+	int arr[4] = { 0, 1, 2, 3 };
+	int* ptr = arr;
+
+	*ptr = arr[1];               // set arr[0] to 1
+	*(ptr + 1) = arr[0] * 10;      // set arr[1] to 10
+	ptr += 2;
+	ptr[0] = arr[1] * 10;        // set arr[2] to 100
+	ptr[1] = 1000;                 // set arr[3] to 1000
+	ptr += 1;
+
+	while (ptr >= arr)
+	{
+		cout << " " << *ptr;    // print values
+		ptr--;
+	}
+	cout << endl;
+	return(0);
+}
+
+b.
+It doesn't work because it was a pass by value and not a pass by reference (the orginial value was not changed). To fix it you add a & in int * p (shown below).
+
+void findLastZero(int arr[], int n, int* &p)
+{
+	p = nullptr;    /// default value if there isn't a 0 in the array at all
+	for (int k = n - 1; k >= 0; k--)
+	{
+		if (arr[k] == 0)      // found an element whose value is 0
+		{
+			p = arr + k;     // change the value of p
+			break;           // stop looping and return
+		}
+	}
+}
+
+int main()
+{
+	int nums[6] = { 10, 20, 0, 40, 30, 50 };
+	int* ptr;
+
+
+	findLastZero(nums, 6, ptr);
+	if (ptr == nullptr)
+	{
+		cout << "The array doesn't have any zeros inside it." << endl;
+	}
+	else
+	{
+		cout << "The last zero is at address " << ptr << endl;
+		cout << "It's at index " << ptr - nums << endl;
+		cout << "The item's value is " << *ptr << " which is zero!" << endl;
+	}
+	return(0);
+}
+
+c.
+Doesn't work because *p is an undefined behaivor and should be set to new int. Pointer needs to be initialized.
+
+void biggest(int value1, int value2, int * resultPtr)
+{
+	if (value1 > value2)
+	{
+		*resultPtr = value1;
+	}
+	else
+	{
+		*resultPtr = value2;
+	}
+}
+
+int main()
+{
+	int* p = new int;
+	biggest(15, 20, p);
+	cout << "The biggest value is " << *p << endl;
+	return(0);
+}
+
+d.
+The function tried to increment pointers and compare arrays. So I assigned each array to a pointer and incremented the pointer. I also dereferenced the pointer in any cases where a comparison was being made so that values, not memory addresses, were compared.
+
+bool match(const char str1[], const char str2[])
+{
+	bool result = true;
+	const char *p1 = str1;
+	const char *p2 = str2;
+	while (*p1 != 0 && *p2 != 0)  // zero bytes at ends 
+	{
+		if (*p1 != *p2)  // compare corresponding characters
+		{
+			result = false;
+			break;
+		}
+		p1++;            // advance to the next character
+		p2++;
+	}
+	if (result)
+	{
+		result = (*p1 == *p2);    // both ended at same time?
+	}
+	return(result);
+}
+
+e.
+The array is created in the method, so it's as local array. The values in the space disappear once it leaves the method. In order for the code to work, the array has to be initialized to be a static variable; using "static int arr[8];" would allow the code to work as intended. 
+
+
+Problem 2:
+1. f
+2. g
+3. a
+4. b
+5. d
+6. c
+7. b 
+8. e
+9. h
+
+Problem 3:
+#include <iostream>
+using namespace std;
+
+int* minimart(int* a, int* b) //function takes in two pointers and returns an integer pointer, fuction is named minimart
+{
+	if (*a < *b) //if the value stored at the address of pointer a is less than the value stored at the address of pointer b
+		return a; //return value of a
+	else //all other cases
+		return b; //return the value of b
+}
+
+void swap1(int* a, int *b)
+{
+	int* temp = a;
+	a = b;
+	b = temp;
+}
+
+void swap2(int* a, int *b)
+{
+	int temp = *a;
+	*a = *b;
+	*b = temp;
+}
+
+int main()
+{
+	int array[6] = { 5, 3, 4, 17, 22, 19 }; //decalre an array
+
+	int* ptr = minimart(array, &array[2]); //set pointer to a function taking in two array address; 1st is array, 2nd one is the pointer of array+2, 
+//takes in 5 and 4 into minimart and minimart returns 4 since 5 > 4
+// at this step the array is { 5, 3, 4, 17, 22, 19}
+
+	ptr[1] = 9; //assign the value of 2nd element of ptr to 9 
+	//changing the value of the 4th element in the array from 17 to 9 
+	// at this step the array is { 5, 3, 4, 9, 22, 19}
+
+	ptr += 2; //shift pointer by 2, which is at the place of 22
+
+	*ptr = -1; //value of the pointerc value at 22 (element 5) to -1
+			   // at this step the array is { 5, 3, 4, 9, -1, 19}
+
+	*(array + 1) = 79; //changes element 2 from 3 to 79
+					   // at this step the array is { 5, 79, 4, 9, -1, 19}
+
+	cout << "diff=" << &array[5] - ptr << endl; //print out "diff= " and the addresses of the sixth element of array minus the address of ptr (6-5) which is 1
+	//cout diff = 1 
+
+	swap1(&array[0], &array[1]); //send two array addresses to the swap1 function, the first one is the 1st element, the second one is the second element, changes where the "arrows" point to
+								 // at this step the array is { 5, 79, 4, 9, -1, 19}
+
+	swap2(array, &array[2]); //It changes the pointers not the values
+							 // at this step the array is {4, 79, 5, 9, -1, 19}
+
+
+	for (int i = 0; i < 6; i++) //prints out first six elements of the array after going through the functions using for loop
+		cout << array[i] << endl; //prints out first six elements of the array after going through the functions and end line. {4, 79, 5, 9, -1, 19}
+
+	return(0);
+}
+
+Summary:
+Declares an array of 6 integers { 5, 3, 4, 17, 22, 19 }
+Passes a pointer to the first and third positions of the array to minimart.
+minimart:
+Returns the lesser of the values of the two pointers, which in this case, is the third element of the array
+Back in main:
+ptr, an integer pointer, gets assigned to the third element of the array
+ptr+1, the fourth element of the array, is set to 9 { 5, 3, 4, 9, 22, 19 }
+ptr is advanced two places to point at the fifth element of the array
+The fifth element of the array is set to -1 { 5, 3, 4, 9, -1, 19 }
+The second element in the array is set to 79 { 5, 79, 4, 9, -1, 19 }
+The function prints the difference between the address of the sixth element in the array and the address which ptr points to, which is the fifth element of the array. Consequently, the output here is 1.
+Passes the addresses of the first and second elements of the array to the swap1 function
+swap1:
+Swaps memory addresses of the first and second elements of the array. This only affects local variables a and b, not the memory locations of the array itself { 5, 79, 4, 9, -1, 19 }
+Back in main:
+Passes the address of the first and third elements of the array to swap2
+swap2:
+Swaps the values of the first and third elements of the array { 4, 79, 5, 9, -1, 19 }
+Back in main:
+Prints all elements of the array to the console { 4, 79, 5, 9, -1, 19 }
+
+Problem 4:
+
+#include <iostream>
+using namespace std;
+
+void deleteCapitals(char* msg) { 
+	
+	
+	while (*msg != '\0') { //if char is not 0 bite
+		
+		if ((*msg > 64) && (*msg < 91)) { //check captiol letter
+			char *ptr = msg;
+			while (*ptr != '\0') {
+				*ptr = *(ptr + 1); //moves everything forweard one to delete the empty space
+				ptr++;
+			}  
+		}
+		msg++;
+	}
+}
+
+
+int main()
+{
+	char msg[100] = "Happy Days Are Here Again!";
+	deleteCapitals(msg);
+	cout << msg << endl;        // prints:   appy ays re ere gain!
+}

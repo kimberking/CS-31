@@ -1,0 +1,71 @@
+
+1.
+endlendl
+endline
+
+2.
+#include <iostream>
+using namespace std;
+
+int main()
+{
+int len;
+cout << "Enter a number: ";
+cin >> len;
+for (int i = 0; i < len; i++)
+{
+int j = 1 + i;
+while (j < len)
+{
+cout << " ";
+j = j + 1;
+}
+cout << "#" << endl;
+}
+}
+
+
+3.
+#include <iostream>
+using namespace std;
+
+int main()
+{
+int len;
+cout << "Enter a number: ";
+cin >> len;	
+int i = 0;
+do
+{
+if (len > 0)
+{
+int j = 1 + i;
+while (j < len)
+{
+cout << " ";
+j = j + 1;
+}
+cout << "#" << endl;
+}
+i++;
+} while (i < len);
+}
+
+4.
+switch (weekday)
+{
+case 1:
+	cout << "rainy days and mondays get me down";
+	break;
+case 2:
+	cout << "ruby tuesday";
+	break;
+case 6:
+	cout << "wonderful weekend";
+	break;
+case 7:
+	cout << "wonderful weekend";
+	break;
+defult:
+	cout << "regular day";
+}
